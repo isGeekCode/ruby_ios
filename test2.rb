@@ -18,3 +18,5 @@ greeter.say_bye
 greeter2 = Greeter.new
 greeter2.say_hi
 greeter2.say_bye
+
+greeter.@name
