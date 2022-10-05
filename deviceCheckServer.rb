@@ -2,6 +2,11 @@ require 'sinatra'
 require 'sinatra/namespace'
 require 'sinatra/json'
 
+unless ENV['RACK_ENV'] == 'production'
+  require 'dotenv'
+  Dotenv.load
+end
+
 require 'openssl'
 require 'http'
 require 'jwt'
@@ -84,6 +89,8 @@ post '/appleServerTest' do
   unless response.status == 200
     return json({ message: 'Error communicating with Apple server', redeemable: false })
   end
+
+  
 
   #response의 body -> Dictionday JSON 형태로 JSON파싱 
   begin response_hash = JSON.parse response.body
