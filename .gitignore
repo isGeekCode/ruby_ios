@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/ruby,rails
 # Edit at https://www.toptal.com/developers/gitignore?templates=ruby,rails
 
+.DS_Store
+
 ### Rails ###
 *.rbc
 capybara-*.html
