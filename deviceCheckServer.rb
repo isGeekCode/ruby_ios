@@ -1,6 +1,4 @@
-require 'sinatra'
-require 'sinatra/namespace'
-require 'sinatra/json'
+
 
 unless ENV['RACK_ENV'] == 'production'
   require 'dotenv'
@@ -12,13 +10,16 @@ require 'http'
 require 'jwt'
 require 'securerandom'
 
-#   "Please send the base 64 encoded device check token in JSON parameter key 'token' to POST /redeem"
-# end
+require 'sinatra'
+require 'sinatra/namespace'
+require 'sinatra/json'
+
+
 configure do
   # set :'0.0.0.0'
   set :binding, '0.0.0.0'
   # set :environment, :development, :production   #직접 파일에서 구분가능함.
-  set :device_check_api_url, 'https://api.development.devicecheck.apple.com'
+  set :device_check_api_url, 'https://api.devicecheck.apple.com'
   set :query_url, settings.device_check_api_url + '/v1/query_two_bits'
   set :update_url, settings.device_check_api_url + '/v1/update_two_bits'
 end
@@ -82,6 +83,15 @@ post '/appleServerTest' do
     return json({ message: 'please supply a token', redeemable: false })
   end
 
+  # 여기까진 
+  # if response.status = 200
+  #   return json({ message: '서버통신 성공', redeemable: false })
+  # end
+  # return json({ message: 'good', redeemable: false })
+  # if response.status = 500
+  #   return json({ message: 'An error occurred on the server', redeemable: false })
+  # end
+
   # 애플서버에 해당기기의 2비트 쿼리 등록 상태 체크
   response = query_two_bits(request_payload['token'])
 
@@ -90,7 +100,9 @@ post '/appleServerTest' do
     return json({ message: 'Error communicating with Apple server', redeemable: false })
   end
 
-  
+  # if response.status = 500
+  #   return json({ message: 'An error occurred on the server', redeemable: false })
+  # end
 
   #response의 body -> Dictionday JSON 형태로 JSON파싱 
   begin response_hash = JSON.parse response.body
